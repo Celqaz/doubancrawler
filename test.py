@@ -1,5 +1,5 @@
-import time
-import numpy as np
-print("xxx")
-time.sleep(np.random.rand()*5)
-print("ttt")
+f = open("books.txt")
+lines = f.readlines()
+print(len(lines))
+# for line in lines:
+#     book_list.append(line.strip('\n'))
