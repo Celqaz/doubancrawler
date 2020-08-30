@@ -54,10 +54,14 @@ def get_book_data(sid):
     
     # BS4
     soup = BeautifulSoup(html,'lxml')
-    # 评分-数字
-    book_data["rating"] = float(soup.find(id='interest_sectl').find(class_='ll rating_num').get_text())
-    # 评分人数-整型
-    book_data["rating_people"] = int(soup.find(id='interest_sectl').find(class_='rating_people').get_text()[:-3])
+    try:
+        # 评分-数字
+        book_data["rating"] = float(soup.find(id='interest_sectl').find(class_='ll rating_num').get_text())
+        # 评分人数-整型
+        book_data["rating_people"] = int(soup.find(id='interest_sectl').find(class_='rating_people').get_text()[:-3])
+    except:
+        book_data["rating"] = -1
+        book_data["rating_people"] = 0
     # 作者
     author = soup.find(id='info').a.get_text()
     book_data["author"] = ''.join(author.split())

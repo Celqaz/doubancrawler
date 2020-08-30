@@ -10,23 +10,26 @@ conn,cur = database.connect_database()
 
 # 寻找sid
 
-bl = get_book_info.get_book_list()
-total = len(bl)
-print("一共"+str(total)+"本书")
-n = 1 
-error_log = []
-for i in bl:
-    print("当前进度："+str((n-1)/total*100)+"%")
-    print("----正在处理第"+str(n)+"本书----")
-    bookname,sid = get_book_info.get_book_sid(i)
-    print('----完╰(*°▽°*)╯成 ----')
-    try:
-        database.insert_sid(conn,cur,bookname,sid)
-        bookdata = get_book_info.get_book_data(sid)
-        database.update_book_data(conn,cur,sid,bookdata)
-    except:
-        error_log.append(bookname+str(n))
-        print(error_log)
-        continue
-    n = n + 1
-print(error_log)
+# bl = get_book_info.get_book_list()
+# total = len(bl)
+# print("一共"+str(total)+"本书")
+# n = 1 
+# error_log = []
+# for i in bl:
+#     print("当前进度："+str((n-1)/total*100)+"%")
+#     print("----正在处理第"+str(n)+"本书----")
+#     bookname,sid = get_book_info.get_book_sid(i)
+#     print('----完╰(*°▽°*)╯成 ----')
+#     try:
+#         database.insert_sid(conn,cur,bookname,sid)
+#         bookdata = get_book_info.get_book_data(sid)
+#         database.update_book_data(conn,cur,sid,bookdata)
+#     except:
+#         error_log.append(bookname+str(n))
+#         print(error_log)
+#         continue
+#     n = n + 1
+# print(error_log)
+
+bookdata = get_book_info.get_book_data('26333840')
+database.update_book_data(conn,cur,'26333840',bookdata)
