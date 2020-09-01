@@ -18,9 +18,8 @@ conn,cur = database.connect_database()
 # for i in bl:
 #     print("当前进度："+str((n-1)/total*100)+"%")
 #     print("----正在处理第"+str(n)+"本书----")
-#     bookname,sid = get_book_info.get_book_sid(i)
-#     print('----完╰(*°▽°*)╯成 ----')
 #     try:
+#         bookname,sid = get_book_info.get_book_sid(i)
 #         database.insert_sid(conn,cur,bookname,sid)
 #         bookdata = get_book_info.get_book_data(sid)
 #         database.update_book_data(conn,cur,sid,bookdata)
@@ -29,7 +28,10 @@ conn,cur = database.connect_database()
 #         print(error_log)
 #         continue
 #     n = n + 1
+#     print('----完╰(*°▽°*)╯成 ----')
 # print(error_log)
 
-bookdata = get_book_info.get_book_data('26333840')
-database.update_book_data(conn,cur,'26333840',bookdata)
+# 手动
+sid = '2119536'
+bookdata = get_book_info.get_book_data(sid)
+database.update_book_data(conn,cur,sid,bookdata)

@@ -65,16 +65,127 @@ def get_book_data(sid):
     # 作者
     author = soup.find(id='info').a.get_text()
     book_data["author"] = ''.join(author.split())
-    # 图书简介，作者简介 intro
+    # 图书简介 intro
+    # debug
+    # try:  
+    #     # 有 展开全部
+    #     book_data["book_summary"] = soup.select('#link-report > span:nth-child(2) > div:nth-child(1) > div:nth-child(2)')[0].get_text().replace("\n", "")
+    # except:
+    #     try:
+    #         intro = soup.find_all(class_='intro')
+    #         book_data["book_summary"] = intro[1].get_text()[1:].replace("\n", "")
+    #     except:
+    #         book_data["book_summary"] = "暂无图书简介"
+    
+    # # 作者简介
+    # try:
+    #     # 有 展开全部
+    #     book_data["author_summary"] = soup.select('div.indent:nth-child(6) > span:nth-child(2) > div:nth-child(2)')[0].get_text().replace("\n", "")
+    # except:
+    #     try:
+    #         intro = soup.find_all(class_='intro')
+    #         book_data["author_summary"] = intro[3].get_text()[1:].replace("\n", "")
+    #     except:
+    #         book_data["author_summary"] = "暂无作者简介"
+
+    # ddddddd
     intro = soup.find_all(class_='intro')
-    try:
-        book_data["book_summary"] = intro[0].get_text()[1:]
-    except:
+    # print(len(intro))
+    # intro = soup.find_all(class_='intro')
+    # try:  
+    #     # 有 展开全部
+    #     # intro = soup.find_all(class_='intro')
+    #     book_data["book_summary"] = intro[0].get_text()[1:].replace("\n", "")
+    #     if book_data["book_summary"][-6:] == '(展开全部)':
+    #         book_data["book_summary"] = intro[1].get_text()[1:].replace("\n", "")
+    #         book_data["author_summary"] = intro[2].get_text()[1:].replace("\n", "")
+    #         if book_data["author_summary"][-6:] == '(展开全部)':
+    #             book_data["author_summary"] = intro[3].get_text()[1:].replace("\n", "")
+    #     else:
+    #         book_data["author_summary"] = intro[1].get_text()[1:].replace("\n", "")
+    # except:
+    #     print(intro)
+    #     book_data["book_summary"] = "暂无图书简介"
+    
+    # test
+    cont_n = 0
+    cont_title = soup.find_all('h2')[0].get_text().replace("\n", "")
+    # print(cont_title[0:4])
+    if cont_title[0:4] == '内容简介':
+        try:
+            book_data["book_summary"] = intro[cont_n].get_text()[1:].replace("\n", "")
+            if book_data["book_summary"][-6:] == '(展开全部)':
+                cont_n = 1
+                book_data["book_summary"] = intro[cont_n].get_text()[1:].replace("\n", "")
+            # print(book_data["book_summary"])
+        except:
+            cont_n = -1
+            book_data["book_summary"] = "暂无图书简介"
+            # print(book_data["book_summary"])
+        try: 
+            book_data["author_summary"] = intro[cont_n+1].get_text()[1:].replace("\n", "")
+            if book_data["author_summary"][-6:] == '(展开全部)':
+                book_data["author_summary"] = intro[cont_n+2].get_text()[1:].replace("\n", "")
+        except:
+            book_data["author_summary"] = "暂无作者简介"
+    if cont_title[0:4] == '作者简介':
         book_data["book_summary"] = "暂无图书简介"
-    try:
-        book_data["author_summary"] = intro[1].get_text()[1:]
-    except:
+        try:
+            book_data["author_summary"] = intro[cont_n].get_text()[1:].replace("\n", "")
+            if book_data["author_summary"][-6:] == '(展开全部)':
+                # cont_n = 1
+                book_data["author_summary"] = intro[cont_n+1].get_text()[1:].replace("\n", "")
+        except:
+            cont_n = -1
+            book_data["author_summary"] = "暂无作者简介"
+    if  (cont_title[0:4] != '内容简介') and (cont_title[0:4] != '作者简介'):
+        book_data["book_summary"] = "暂无图书简介"
         book_data["author_summary"] = "暂无作者简介"
+
+    # cont_n = 0
+    # try:
+    #     book_data["book_summary"] = intro[cont_n].get_text()[1:].replace("\n", "")
+    #     if book_data["book_summary"][-6:] == '(展开全部)':
+    #         cont_n = 1
+    #         book_data["book_summary"] = intro[cont_n].get_text()[1:].replace("\n", "")
+    # except:
+    #     cont_n = -1
+    #     book_data["book_summary"] = "暂无图书简介"
+    
+    # try: 
+    #     book_data["author_summary"] = intro[cont_n+1].get_text()[1:].replace("\n", "")
+    #     if book_data["author_summary"][-6:] == '(展开全部)':
+    #         book_data["author_summary"] = intro[cont_n+2].get_text()[1:].replace("\n", "")
+    # except:
+    #     book_data["author_summary"] = "暂无作者简介"
+    
+
+    
+    # try:
+    #     .intro
+    #     book_data["book_summary"] = ('#link-report > span:nth-child(1) > div:nth-child(2)')[0].get_text().replace("\n", "")
+    #     if book_data["book_summary"][-6:] == '(展开全部)':
+    #         book_data["book_summary"] = ('span.all > div:nth-child(1) > div:nth-child(2)')[0].get_text().replace("\n", "")
+    # except:
+    #     book_data["book_summary"] = "暂无内容简介"
+    
+    # try:
+    #     book_data["author_summary"] = ('div.indent:nth-child(5) > div:nth-child(1) > div:nth-child(2)')[0].get_text().replace("\n", "")
+    #     if book_data["author_summary"][-6:] == '(展开全部)':
+    #         book_data["author_summary"] = ('div.indent:nth-child(5) > span:nth-child(2) > div:nth-child(2)')[0].get_text().replace("\n", "")
+    # except:
+    #     book_data["author_summary"] = "暂无作者简介"
+    # 作者简介
+    # try:
+    #     # 有 展开全部
+    #     book_data["author_summary"] = soup.select('div.indent:nth-child(6) > span:nth-child(2) > div:nth-child(2)')[0].get_text().replace("\n", "")
+    # except:
+    #     try:
+    #         intro = soup.find_all(class_='intro')
+    #         book_data["author_summary"] = intro[3].get_text()[1:].replace("\n", "")
+    #     except:
+    #         book_data["author_summary"] = "暂无作者简介"
+
 
     # book_data["book_summary"] = soup.select("#link-report > span:nth-child(1) > div:nth-child(2)")[0].get_text()
     # book_data["author_summary"] = soup.select("div.indent:nth-child(6) > div:nth-child(1) > div:nth-child(2)")[0].get_text()
@@ -89,4 +200,4 @@ def get_book_data(sid):
 
 # get_book_data('5337254')
 # get_book_data('6781808')
-# get_book_data('2154960')
+# get_book_data('1902852')
